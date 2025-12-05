@@ -3,9 +3,9 @@
 		display: flex;
 		gap: 2rem;
 		align-items: center;
-		button {
-			border-radius: 45%;
-			padding: 0.7em;
-		}
+	}
+	button {
+		border-radius: 45%;
+		padding: 0.7em;
 	}
 }
