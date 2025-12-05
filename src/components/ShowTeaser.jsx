@@ -7,12 +7,13 @@ export default function ShowTeaser({
 	title,
 	displayDate,
 	show_notes,
-	show_type,
 	slug,
 	url,
 }) {
+	// Construct the friendly URL for this specific episode.
 	const urlAdress = `/show/${number}/${slug}`;
 
+	// Destructure the action needed to start playback from the Zustand store.
 	const playEpisode = usePlayerStore(({ playEpisode }) => playEpisode);
 
 	return (
@@ -44,8 +45,3 @@ export default function ShowTeaser({
 		</article>
 	);
 }
-
-/* function cutShowNotes (text){
-    return text.slice(0, text.search("###"));
-
-} */

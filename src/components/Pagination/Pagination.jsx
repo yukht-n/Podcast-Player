@@ -7,6 +7,7 @@ export default function Pagination({
 	setCurrentPage,
 	numbersOfPages,
 }) {
+	/* This function manages the core state update logic, potentially wrapped in View Transition API. */
 	const handlePageClick = (newPage) => {
 		if (!document.startViewTransition) {
 			setCurrentPage(newPage);
@@ -19,9 +20,11 @@ export default function Pagination({
 
 	return (
 		<nav aria-label="Pagination of Results">
-			<ul className={classes.pagination} /* className="pagination-list" */>
+			<ul className={classes.pagination}>
+				{/* --- RENDER FIRST/PREV BUTTONS --- */}
 				{currentPage === 1 ? (
 					<>
+						{/* If this is page 1, show disabled <span> elements for first/previous. */}
 						<li style={{ '--vt-name': 'first' }}>
 							<span>&laquo;&laquo;</span>
 						</li>
@@ -31,6 +34,7 @@ export default function Pagination({
 					</>
 				) : (
 					<>
+						{/* First Page Link */}
 						<li style={{ '--vt-name': 'first' }}>
 							<a
 								href={`?page=1`}
@@ -44,11 +48,13 @@ export default function Pagination({
 							</a>
 						</li>
 
+						{/* Previous Page Link */}
 						<li style={{ '--vt-name': 'prev' }}>
 							<a
 								href={`?page=${Math.max(1, currentPage - 1)}`}
 								onClick={(e) => {
 									e.preventDefault();
+									/* Ensure page doesn't go below 1 */
 									handlePageClick(Math.max(1, currentPage - 1));
 								}}
 								aria-label="Previous Page"
@@ -58,15 +64,20 @@ export default function Pagination({
 						</li>
 					</>
 				)}
+				{/* --- END RENDER FIRST/PREV BUTTONS --- */}
 
+				{/* --- RENDER PAGE NUMBERS --- */}
 				{PAGES_IN_PAGINATION.map((value) => {
 					const newPage = currentPage + value;
 					if (newPage < 1 || newPage > numbersOfPages) return null;
+
+					/* 'vt-name' is used by the View Transition API for identifying elements. */
 					return (
 						<li
 							style={{ '--vt-name': newPage }}
 							key={`pagination-key-${value}`}
 						>
+							{/* If value is not 0 (i.e., not the current page) */}
 							{value ? (
 								<a
 									href={`?page=${newPage}`}
@@ -84,8 +95,12 @@ export default function Pagination({
 						</li>
 					);
 				})}
+				{/* --- END RENDER PAGE NUMBERS --- */}
+
+				{/* --- RENDER LAST/NEXT BUTTONS --- */}
 				{currentPage === numbersOfPages ? (
 					<>
+						{/* If this is the Last page, show disabled <span> elements. */}
 						<li style={{ '--vt-name': 'next' }}>
 							<span>&raquo;</span>
 						</li>
@@ -95,6 +110,7 @@ export default function Pagination({
 					</>
 				) : (
 					<>
+						{/* Next Page Link */}
 						<li style={{ '--vt-name': 'next' }}>
 							<a
 								href={`?page=${Math.min(numbersOfPages, currentPage + 1)}`}
@@ -108,6 +124,7 @@ export default function Pagination({
 							</a>
 						</li>
 
+						{/* Last Page Link */}
 						<li style={{ '--vt-name': 'last' }}>
 							<a
 								href={`?page=${numbersOfPages}`}
@@ -122,6 +139,7 @@ export default function Pagination({
 						</li>
 					</>
 				)}
+				{/* --- END RENDER LAST/NEXT BUTTONS --- */}
 			</ul>
 		</nav>
 	);

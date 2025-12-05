@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { usePlayerStore } from '../playerStore';
 import { getNormalTime } from '../helpers';
+import { usePlayerStore } from '../playerStore';
 
 export default function PodcastPlayer() {
+	/* Global state management via Zustand (usePlayerStore) */
 	const {
 		currentEpisode,
 		isPlaying,
@@ -16,42 +17,45 @@ export default function PodcastPlayer() {
 		playEpisode,
 	} = usePlayerStore();
 
-	const audioRef = useRef();
-	const [isChanging, setIsChanging] = useState(false);
-	const [playerTime, setPlayerTime] = useState(0);
+	const audioRef = useRef(); // Reference to the actual <audio>
+	const [isChanging, setIsChanging] = useState(false); //when user is dragging the seek bar
+	const [playerTime, setPlayerTime] = useState(0); //Time displayed while user is seekiing
 	const [isPlayerHidden, setIsPlayerHidden] = useState(false);
 
+	/**
+	 * Synchronize React state (isPlaying, currentTime) with the native <audio> element.
+	 */
 	useEffect(() => {
 		if (!audioRef.current) return;
+
+		// 1. Play/Pause synchronization
 		if (isPlaying) audioRef.current.play();
 		else audioRef.current.pause();
 
+		// 2. Time synchronization (Seek position)
 		if (Math.abs(currentTime - audioRef.current.currentTime) > 0.9)
 			audioRef.current.currentTime = currentTime;
 	}, [isPlaying, currentTime]);
 
+	/**
+	 * Synchronize global volume state with the native <audio> element.
+	 */
 	useEffect(() => {
 		audioRef.current.volume = volume;
 	}, [volume]);
 
+	/* Setting the total duration of the episode. */
 	const handleDuration = () => setDuration(audioRef.current.duration);
 
+	/* Setting the CurrentTime of the episode with a small threshold (0.5s) */
 	const handleCurrentTime = () => {
 		if (!isChanging && audioRef.current.currentTime - currentTime > 0.5)
 			setCurrentTime(audioRef.current.currentTime);
 	};
 
-	/* 	const handleIsChanging = () => setIsChanging((isChanging) => !isChanging); */
-
-	/* 	const seek = (e) => {
-		const newTime = parseFloat(e.target.value);
-		setPlayerTime(newTime);
-		setCurrentTime(newTime);
-		audioRef.current.currentTime = newTime;
-	}; */
-
 	return (
 		<>
+			{/* The invisible <audio> element responsible for playback */}
 			<audio
 				ref={audioRef}
 				/* controls */
@@ -59,8 +63,11 @@ export default function PodcastPlayer() {
 				onLoadedMetadata={handleDuration}
 				onTimeUpdate={handleCurrentTime}
 			/>
+
+			{/* Render player UI only if an episode is selected */}
 			{currentEpisode && (
 				<div className="podcast-player">
+					{/* --- Minimize/Close Controls --- */}
 					<div className="podcast-player__box-control">
 						<button
 							type="button"
@@ -93,7 +100,11 @@ export default function PodcastPlayer() {
 							×
 						</button>
 					</div>
+					{/* --- END Minimize/Close Controls --- */}
+
 					<p>{`Show #${currentEpisode.number} - ${currentEpisode.title}`}</p>
+
+					{/* --- Player Controls (Play, Seek, Volume) --- */}
 					<div
 						className={
 							isPlayerHidden
@@ -101,6 +112,7 @@ export default function PodcastPlayer() {
 								: `podcast-player__control`
 						}
 					>
+						{/* Play/Pause Button */}
 						<button
 							type="button"
 							onClick={tooglePlayPause}
@@ -108,42 +120,50 @@ export default function PodcastPlayer() {
 						>
 							{isPlaying ? '⏸️' : '▶️'}
 						</button>
+						{/* ENDE Play/Pause Button */}
 
+						{/* Current Time Display. Showing local playerTime if dragging, otherwise shows synchronized currentTime */}
 						<div className="podcast-player__time">
-							{getNormalTime(isChanging ? playerTime : currentTime)}{' '}
-							{/* /{' '}
-							{getNormalTime(duration)} */}
+							{getNormalTime(isChanging ? playerTime : currentTime)}
 						</div>
 
+						{/* Seek Bar */}
 						<div className="podcast-player__seek-bar">
 							<input
 								type="range"
+								/* Showing lockalTime while seekenig */
 								value={isChanging ? playerTime : currentTime}
 								min="0"
 								max={duration}
+								/* Saving currentTime in PlayerTime and showing only PlayerTime  */
 								onMouseDown={() => [
 									setPlayerTime(currentTime),
 									setIsChanging(true),
 								]}
-								onMouseUp={() => [
-									setCurrentTime(playerTime),
-									setIsChanging(false),
-								]}
-								onChange={(e) => setPlayerTime(parseFloat(e.target.value))}
 								onTouchStart={() => [
 									setPlayerTime(currentTime),
 									setIsChanging(true),
+								]}
+								/* Saving newTime in CurrentTime and showing  CurrentTime  */
+								onMouseUp={() => [
+									setCurrentTime(playerTime),
+									setIsChanging(false),
 								]}
 								onTouchMove={(e) => setPlayerTime(parseFloat(e.target.value))}
 								onTouchEnd={() => [
 									setCurrentTime(playerTime),
 									setIsChanging(false),
 								]}
+								onChange={(e) => setPlayerTime(parseFloat(e.target.value))}
 							/>
 						</div>
+
+						{/* Total Duration Display */}
 						<div className="podcast-player__time">
 							{getNormalTime(duration)}
 						</div>
+
+						{/* Volume Control */}
 						<div className="podcast-player__volume-bar">
 							<input
 								type="range"
@@ -151,10 +171,12 @@ export default function PodcastPlayer() {
 								min="0"
 								step="0.05"
 								max="1"
-								onChange={(e) => setVolume(parseFloat(e.target.value))}
+								onChange={(e) => setVolume(parseFloat(e.target.value))} // Update global volume state
 							/>
 						</div>
+						{/* END Volume Control */}
 					</div>
+					{/* --- END Player Controls (Play, Seek, Volume) --- */}
 				</div>
 			)}
 		</>
