@@ -10,6 +10,7 @@ import Show from './components/Show';
 import ShowsPage from './components/ShowsPage';
 import { NuqsAdapter } from 'nuqs/adapters/react';
 import PodcastPlayer from './components/PodcastPlayer';
+import { HelmetProvider } from '@dr.pogodin/react-helmet';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -25,24 +26,26 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<React.StrictMode>
 		<QueryClientProvider client={queryClient}>
-			<Header />
+			<HelmetProvider>
+				<Header />
 
-			<main className="site-content content-padding">
-				<Suspense fallback={<strong>Laden… ⌛</strong>}>
-					<Route path="/" component={HomePage} />
-				</Suspense>
-				<NuqsAdapter>
+				<main className="site-content content-padding">
 					<Suspense fallback={<strong>Laden… ⌛</strong>}>
-						<Route path="/shows" component={ShowsPage} />
+						<Route path="/" component={HomePage} />
 					</Suspense>
-				</NuqsAdapter>
-				<Suspense fallback={<strong>Laden… ⌛</strong>}>
-					<Route path="/show/:id/:slug" component={Show} />
-				</Suspense>
-			</main>
-			<Footer />
-			<PodcastPlayer />
-			<ReactQueryDevtools />
+					<NuqsAdapter>
+						<Suspense fallback={<strong>Laden… ⌛</strong>}>
+							<Route path="/shows" component={ShowsPage} />
+						</Suspense>
+					</NuqsAdapter>
+					<Suspense fallback={<strong>Laden… ⌛</strong>}>
+						<Route path="/show/:id/:slug" component={Show} />
+					</Suspense>
+				</main>
+				<Footer />
+				<PodcastPlayer />
+				<ReactQueryDevtools />
+			</HelmetProvider>
 		</QueryClientProvider>
 	</React.StrictMode>
 );

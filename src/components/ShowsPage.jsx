@@ -6,6 +6,7 @@ import { queryFn, queryKey } from '../showsAPI';
 import FilterForm from './FilterForm';
 import Pagination from './Pagination/Pagination';
 import ShowTeaser from './ShowTeaser';
+import { Helmet } from '@dr.pogodin/react-helmet';
 
 export default function ShowsPage() {
 	const { data: shows = [] } = useQuery({ queryKey, queryFn });
@@ -47,7 +48,11 @@ export default function ShowsPage() {
 	return (
 		<>
 			<div>
+				<Helmet>
+					<title>{`All Episodes - Page ${currentPage}`}</title>
+				</Helmet>
 				<h1>All Episodes</h1>
+
 				<FilterForm
 					{...{
 						typeList,

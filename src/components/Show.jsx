@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import Markdown from 'react-markdown';
 import { usePlayerStore } from '../playerStore';
 import { queryFn, queryKey } from '../showsAPI';
+import { Helmet } from '@dr.pogodin/react-helmet';
 
 export default function Show({ params: { id } }) {
 	const { data: shows = [] } = useQuery({ queryFn, queryKey });
@@ -61,6 +62,9 @@ export default function Show({ params: { id } }) {
 				>
 					⏯️
 				</button>{' '}
+				<Helmet>
+					<title>{show.title}</title>
+				</Helmet>
 				<h1>{show.title}</h1>
 			</div>
 
