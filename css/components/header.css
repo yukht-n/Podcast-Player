@@ -1,0 +1,28 @@
+.header-component {
+	display: flex;
+	/* justify-content: space-between; */
+	align-items: center;
+	.main-navigation {
+		list-style: none;
+		display: flex;
+		margin-block: 1rem;
+		li {
+			border-radius: 30%;
+			&:hover {
+				background-color: var(--gray-5);
+				cursor: pointer;
+			}
+			a {
+				display: block;
+				margin: 30px 20px;
+
+				&:hover {
+					color: var(--link-color);
+				}
+			}
+			& [aria-current='page'] {
+				border-bottom: 2px solid black;
+			}
+		}
+	}
+}

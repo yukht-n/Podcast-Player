@@ -1,0 +1,10 @@
+a {
+	color: var(--link-color);
+	/* text-decoration-thickness: 0.1em; */
+	text-decoration: none;
+	&:hover,
+	&:focus-visible {
+		color: var(--link-color-active);
+		text-decoration-thickness: 0.15em;
+	}
+}

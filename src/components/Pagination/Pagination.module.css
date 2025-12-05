@@ -1,0 +1,14 @@
+.pagination {
+	list-style: none;
+	display: flex;
+	margin-block: 1rem;
+
+	li {
+		view-transition-name: var(--vt-name);
+
+		padding: 1rem;
+		a {
+			color: var(--orange-6);
+		}
+	}
+}

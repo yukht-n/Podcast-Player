@@ -1,0 +1,14 @@
+@import 'utilities'; /* Mit normalize.css */
+@import 'elements';
+@import 'queries';
+@import 'globals';
+@import 'layout';
+@import 'navigation';
+@import 'typographie';
+@import 'components';
+
+:root {
+	/* Workaround for using open-props gradients.
+ Bug: https://github.com/argyleink/open-props/issues/556*/
+	--gradient-space: in oklab;
+}
