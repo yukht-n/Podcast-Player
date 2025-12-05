@@ -1,4 +1,4 @@
-## 📚 Project Name: Podcast Aplication (Student Project)
+## 📚 Project Name: Podcast Application (Student Project)
 
 This is a small, modern single-page application (SPA) created as a student project to demonstrate proficiency in contemporary React state management, data fetching, routing, and optimization techniques.
 
