@@ -75,4 +75,4 @@ This project demonstrates the effective integration of several key modern React 
 2.  **Declarative Data Fetching:** Replacing boilerplate `useEffect` fetching with the declarative `useQuery`.
 3.  **Advanced UX:** Using URL state (`nuqs`) to make the application state bookmarkable and shareable, combined with View Transitions for a perceived speed boost.
 
-Link to Demo -> https://podcast-player-tawny-six.vercel.app/
+Link to Demo -> https://syntax-fm.vercel.app/
